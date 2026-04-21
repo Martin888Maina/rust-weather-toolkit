@@ -4,6 +4,7 @@
 **Author:** Martin Maina
 **Date:** December 2025
 **Repository:** [rust-weather-toolkit](https://github.com/Martin888Maina/rust-weather-toolkit)
+**Live Demo:** [weather.martinmaina.dev](https://weather.martinmaina.dev)
 
 ---
 
@@ -14,21 +15,23 @@
 - HTTP API integration using async/await
 - Terminal (CLI) interface development
 - Graphical User Interface (GUI) development
-- Real-world application building
+- Web server development with Actix-web
+- Real-world application building and cloud deployment
 
 ### Why Did I Choose Rust?
 1. **Industry Relevance**: Used by major tech companies (Mozilla, Discord, Cloudflare, AWS)
 2. **Assignment Requirement**: Not Python, Java, or JavaScript
 3. **Learning Challenge**: Different paradigm with memory safety and ownership concepts
 4. **Growing Ecosystem**: Modern tooling, active community, and excellent documentation
-5. **Real-world Skills**: Perfect for building system tools and high-performance applications
+5. **Real-world Skills**: Perfect for building system tools, high-performance applications, and web services
 
 ### What's the End Goal?
 Build a functional weather application with:
 - **Terminal interface** for quick command-line weather lookups
 - **GUI interface** for visual interaction with weather data
+- **Web interface** accessible from any browser, deployed live on Digital Ocean
 - **Shared core logic** demonstrating code reusability and the DRY principle
-- Both interfaces fetch real-time weather data from the OpenWeatherMap API
+- All interfaces fetch real-time weather data from the OpenWeatherMap API
 
 ---
 
@@ -155,6 +158,7 @@ cp .env.example .env
 # Edit .env and add your API key
 # File should contain:
 OPENWEATHER_API_KEY=your_actual_api_key_here
+PORT=3005
 ```
 
 **Important:** The `.env` file is already in `.gitignore` and will NOT be committed to Git.
@@ -162,14 +166,13 @@ OPENWEATHER_API_KEY=your_actual_api_key_here
 ### Step 5: Build the Project
 
 ```bash
-# Install dependencies and compile
+# Desktop build (CLI + GUI) - default
 cargo build
 
-# This will:
-# 1. Download all required crates
-# 2. Compile dependencies
-# 3. Build the application
-# Note: First build takes 2-5 minutes
+# Web server build only (no GUI/X11 dependencies)
+cargo build --release --no-default-features --features web
+
+# Note: First build takes 2-10 minutes depending on your machine
 ```
 
 ---
@@ -190,7 +193,7 @@ cargo run -- --city "London"
 
 **Expected Output:**
 ```
-🔍 Fetching weather for London...
+Fetching weather for London...
 
 Weather in London, GB:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -218,11 +221,11 @@ cargo run
 
 **Example Session:**
 ```
-🌤️  Weather CLI Application
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Weather CLI Application
+-------------------------------
 
 Enter city name (or 'quit' to exit): Nairobi
-🔍 Fetching weather for Nairobi...
+Fetching weather for Nairobi...
 
 Weather in Nairobi, KE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -236,7 +239,8 @@ Weather in Nairobi, KE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Enter city name (or 'quit' to exit): quit
-👋 Goodbye!
+
+Goodbye!
 ```
 
 ### Example 3: GUI Mode
@@ -253,9 +257,88 @@ cargo run -- --gui
 - Displays formatted results with icons
 - Shows loading indicator during fetch
 
+### Example 4: Web Server Mode
+
+```bash
+# Start the web server (runs on port 3005 by default)
+cargo run --no-default-features --features web -- --web
+```
+
+**What This Does:**
+- Starts an Actix-web HTTP server on `http://localhost:3005`
+- Serves a responsive browser-based weather UI
+- Exposes a JSON API at `/api/weather?city=CityName`
+- Reads `PORT` from the `.env` file if set
+
+**API Response Example:**
+```bash
+curl http://localhost:3005/api/weather?city=Nairobi
+```
+```json
+{
+  "city": "Nairobi",
+  "country": "KE",
+  "temperature": 22.5,
+  "feels_like": 22.1,
+  "description": "broken clouds",
+  "humidity": 65,
+  "pressure": 1013,
+  "wind_speed": 3.5,
+  "visibility": 10000
+}
+```
+
 ---
 
-## 6. AI Prompt Journal
+## 6. Web Deployment (Digital Ocean)
+
+This application includes a full web server wrapper built with Actix-web, allowing it to be deployed as a live web service accessible from any browser.
+
+### Architecture
+
+```
+Browser → Nginx (HTTPS/443) → Proxy → Rust/Actix-web (port 3005)
+                                              ↓
+                                     OpenWeatherMap API
+```
+
+### How the Web Wrapper Works
+
+The application uses **Cargo feature flags** to separate the desktop and server builds:
+
+| Build | Command | Includes |
+|-------|---------|----------|
+| Desktop (default) | `cargo build` | CLI + GUI (egui/eframe) |
+| Server (production) | `cargo build --release --no-default-features --features web` | Web server only — no X11/GUI dependencies |
+
+This means the same codebase compiles cleanly on a headless Linux server without requiring any display libraries.
+
+### Deployment Files
+
+The repository includes ready-to-use deployment configuration:
+
+- **`weather-app.service`** — systemd unit file to run the server as a background service
+- **`nginx.conf`** — Nginx reverse proxy config for `weather.martinmaina.dev`
+- **`weather-app/static/`** — Browser frontend (HTML, CSS, JS) served directly by the Rust server
+
+### Server Build & Run
+
+```bash
+# On the server, build the web-only binary
+cargo build --release --no-default-features --features web
+
+# Run manually to test
+./target/release/weather-app --web
+
+# Install as a system service
+sudo cp weather-app.service /etc/systemd/system/
+sudo systemctl enable weather-app
+sudo systemctl start weather-app
+```
+
+---
+
+## 7. AI Prompt Journal
 
 This section documents all AI prompts used during development, based on Moringa School's recommended prompt strategies for learning new technologies.
 
@@ -280,9 +363,7 @@ This section documents all AI prompts used during development, based on Moringa 
 #### Prompt 4: Test Planning Guidance
 **Prompt Used:** "Help me create a testing plan for WeatherResponse struct and fetch_weather function by asking guiding questions, helping identify behaviors and edge cases, and creating a prioritized test checklist rather than writing tests directly."
 **Link:** https://ai.moringaschool.com
-**Response Summary:** AI guided through identifying testable behaviors (JSON deserializ
-
-ation, error handling), suggested test priorities, and helped discover edge cases.
+**Response Summary:** AI guided through identifying testable behaviors (JSON deserialization, error handling), suggested test priorities, and helped discover edge cases.
 **Evaluation:** Very good - Learned testing principles through guided discovery.
 
 #### Prompt 5: Code Structure Improvement
@@ -343,13 +424,13 @@ ation, error handling), suggested test priorities, and helped discover edge case
 
 ---
 
-## 7. Common Issues & Fixes
+## 8. Common Issues & Fixes
 
 ### Issue 1: "API key not found in environment"
 
 **Error Message:**
 ```
-❌ Error: OPENWEATHER_API_KEY not found
+Error: OPENWEATHER_API_KEY not found
    Please create a .env file with your API key
 ```
 
@@ -357,16 +438,9 @@ ation, error handling), suggested test priorities, and helped discover edge case
 
 **Solution:**
 ```bash
-# Verify .env file exists in weather-app directory
-ls .env
-
-# Check contents (on Windows)
-type .env
-
-# Should show: OPENWEATHER_API_KEY=your_key_here
-
-# Recreate if needed
-echo OPENWEATHER_API_KEY=your_key > .env
+# Recreate .env from the example template
+cp .env.example .env
+# Then edit it and add your real API key
 ```
 
 **Prevention:** Ensure `.env` file is in the `weather-app` directory (same location as `Cargo.toml`).
@@ -377,7 +451,7 @@ echo OPENWEATHER_API_KEY=your_key > .env
 
 **Error Message:**
 ```
-❌ API error: Status code: 401
+API error: Status code: 401
 ```
 
 **Cause:** Invalid or inactive API key
@@ -399,7 +473,7 @@ echo OPENWEATHER_API_KEY=your_key > .env
 
 **Error Message:**
 ```
-❌ Error: City 'XYZ' not found
+City 'XYZ' not found. Please check the spelling.
 ```
 
 **Cause:** Incorrect city name or spelling
@@ -416,12 +490,6 @@ Nairobi
 London, UK
 New York
 Tokyo
-```
-
-**Examples That Don't Work:**
-```
-Nairbi     # Spelling error
-NYC        # Use full name "New York"
 ```
 
 ---
@@ -491,6 +559,27 @@ error: linker `link.exe` not found
 
 ---
 
+### Issue 7: Web server fails to start — "address already in use"
+
+**Error Message:**
+```
+Failed to bind to 0.0.0.0:3005: address already in use
+```
+
+**Cause:** Something else is already running on port 3005
+
+**Solution:**
+```bash
+# Find what is using port 3005
+sudo lsof -i :3005
+
+# Stop the process using that port, then restart the server
+# Or change the port in your .env file:
+PORT=3006
+```
+
+---
+
 ### Getting Additional Help
 
 If you encounter issues not listed here:
@@ -506,7 +595,7 @@ If you encounter issues not listed here:
 
 ---
 
-## 8. References
+## 9. References
 
 ### Official Documentation
 
@@ -529,6 +618,10 @@ If you encounter issues not listed here:
 - [reqwest](https://docs.rs/reqwest/) - HTTP client library
 - [serde](https://serde.rs/) - Serialization framework
 - [tokio](https://tokio.rs/) - Async runtime
+
+**Web Server:**
+- [actix-web](https://docs.rs/actix-web/) - High-performance web framework
+- [actix-files](https://docs.rs/actix-files/) - Static file serving for actix-web
 
 **CLI & GUI:**
 - [clap](https://docs.rs/clap/) - Command-line argument parser
@@ -573,13 +666,20 @@ If you encounter issues not listed here:
 rust-weather-toolkit/
 ├── weather-app/              # Main application
 │   ├── src/
-│   │   ├── main.rs          # Entry point & mode selection
-│   │   ├── weather.rs       # Core weather API logic (shared)
-│   │   ├── cli.rs           # CLI argument parsing
-│   │   └── gui.rs           # GUI interface
-│   ├── Cargo.toml           # Dependencies & metadata
-│   ├── .env                 # API key (gitignored)
+│   │   ├── main.rs          # Entry point & mode selection (CLI / GUI / Web)
+│   │   ├── weather.rs       # Core weather API logic (shared across all modes)
+│   │   ├── cli.rs           # CLI argument parsing (--city, --gui, --web)
+│   │   ├── gui.rs           # Desktop GUI interface (egui)
+│   │   └── web.rs           # Web server & REST API (actix-web)
+│   ├── static/              # Browser frontend (served by web mode)
+│   │   ├── index.html       # Responsive weather UI
+│   │   ├── style.css        # Dark theme styles
+│   │   └── app.js           # Frontend logic (fetch API, render results)
+│   ├── Cargo.toml           # Dependencies & feature flags
+│   ├── .env                 # API key & port (gitignored)
 │   └── .env.example         # Template for setup
+├── weather-app.service      # systemd service file for Digital Ocean
+├── nginx.conf               # Nginx reverse proxy config
 ├── .gitignore               # Git exclusions
 ├── LICENSE                  # MIT License
 └── README.md                # This file
@@ -588,23 +688,28 @@ rust-weather-toolkit/
 ## 🛠️ Tech Stack
 
 - **Language**: Rust 1.70+
-- **HTTP Client**: reqwest (async HTTP requests)
+- **HTTP Client**: reqwest (async API requests to OpenWeatherMap)
+- **Web Framework**: actix-web 4 (HTTP server for web mode)
+- **Static Files**: actix-files (serves HTML/CSS/JS frontend)
 - **JSON**: serde, serde_json (serialization/deserialization)
 - **Async Runtime**: tokio (asynchronous programming)
-- **GUI**: egui, eframe (immediate-mode GUI)
+- **GUI**: egui, eframe (immediate-mode desktop GUI)
 - **CLI**: clap (command-line argument parsing)
 - **Environment**: dotenv (environment variable management)
 - **API**: OpenWeatherMap (weather data provider)
+- **Server**: Digital Ocean Droplet + Nginx + systemd
 
 ## ✨ Features
 
+- 🌐 **Web Interface**: Browser-based weather app, live at [weather.martinmaina.dev](https://weather.martinmaina.dev)
 - 🖥️ **Terminal Interface**: Interactive CLI for quick weather lookups
-- 🎨 **GUI Interface**: Visual application with modern design using egui
-- 🔄 **Shared Logic**: DRY principle with reusable core weather module
+- 🎨 **GUI Interface**: Visual desktop application using egui
+- 🔄 **Shared Logic**: DRY principle — one `weather.rs` module powers all three interfaces
 - 🌍 **Real-time Data**: Live weather from OpenWeatherMap API
 - ⚡ **Async Operations**: Fast, non-blocking API calls with tokio
+- 🏗️ **Feature Flags**: Cargo features separate desktop and server builds cleanly
 - 📝 **Unit Tests**: Test coverage for core functionality
-- 🔒 **Security**: API key management with environment variables
+- 🔒 **Security**: API key management with environment variables, never exposed to the browser
 
 ## 🧪 Testing
 
@@ -626,24 +731,25 @@ cargo clippy
 
 ## 📊 Project Statistics
 
-- **Lines of Code**: ~500
+- **Lines of Code**: ~700
 - **Development Time**: Completed with AI assistance
-- **Dependencies**: 8 main crates
+- **Dependencies**: 10 main crates
 - **Test Coverage**: Core weather functionality
-- **Interfaces**: 2 (Terminal CLI + GUI)
+- **Interfaces**: 3 (Terminal CLI + Desktop GUI + Web Browser)
 
 ## 🎯 Capstone Requirements Met
 
 This project fulfills all Moringa School capstone requirements:
 
 ✅ **Technology Exploration**: Rust (not Python/Java/JavaScript)
-✅ **Working Example**: Both CLI and GUI fully functional
+✅ **Working Example**: CLI, GUI, and web interface all fully functional
 ✅ **Documentation**: Comprehensive setup and usage guide
 ✅ **AI Prompts**: 12+ documented prompts with evaluations
 ✅ **Testing**: Unit tests and manual testing completed
 ✅ **Code Repository**: GitHub with clear commit history
 ✅ **Common Errors**: Troubleshooting section included
 ✅ **References**: Official docs and learning resources provided
+✅ **Live Deployment**: Application deployed at [weather.martinmaina.dev](https://weather.martinmaina.dev)
 
 ## 👤 Author
 
@@ -663,5 +769,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - AI tools (ai.moringaschool.com) for accelerating the learning process
 
 ---
-
-
