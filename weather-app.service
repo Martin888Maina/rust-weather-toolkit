@@ -1,0 +1,16 @@
+[Unit]
+Description=Rust Weather Toolkit Web Server
+After=network.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=martin
+WorkingDirectory=/var/www/rust-weather-toolkit/weather-app
+ExecStart=/var/www/rust-weather-toolkit/weather-app/target/release/weather-app --web
+Restart=on-failure
+RestartSec=5s
+EnvironmentFile=/var/www/rust-weather-toolkit/weather-app/.env
+
+[Install]
+WantedBy=multi-user.target
