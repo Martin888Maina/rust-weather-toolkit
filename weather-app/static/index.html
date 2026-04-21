@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Toolkit</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Weather Toolkit</h1>
+            <p class="subtitle">Real-time weather data powered by Rust</p>
+        </header>
+
+        <main>
+            <div class="search-card">
+                <div class="search-row">
+                    <input
+                        type="text"
+                        id="city-input"
+                        placeholder="Enter city name (e.g. Nairobi, London)"
+                        autocomplete="off"
+                        autofocus
+                    />
+                    <button id="search-btn" onclick="fetchWeather()">Search</button>
+                </div>
+                <div id="error-msg" class="error-msg hidden"></div>
+            </div>
+
+            <div id="loading" class="loading hidden">
+                <div class="spinner"></div>
+                <p>Fetching weather data...</p>
+            </div>
+
+            <div id="weather-card" class="weather-card hidden">
+                <div class="weather-header">
+                    <h2 id="city-name"></h2>
+                    <span id="country-badge" class="country-badge"></span>
+                </div>
+                <div class="weather-description" id="description"></div>
+                <div class="weather-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">Temperature</span>
+                        <span class="stat-value" id="temperature"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Feels Like</span>
+                        <span class="stat-value" id="feels-like"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Humidity</span>
+                        <span class="stat-value" id="humidity"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Pressure</span>
+                        <span class="stat-value" id="pressure"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Wind Speed</span>
+                        <span class="stat-value" id="wind-speed"></span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Visibility</span>
+                        <span class="stat-value" id="visibility"></span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <p>Built with Rust &amp; Actix-web &bull; Data from OpenWeatherMap</p>
+        </footer>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
