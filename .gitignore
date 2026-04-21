@@ -25,3 +25,11 @@ target
 
 # Guide file (internal use only)
 rust-weather-toolkit-guide.md
+
+# Planning and deployment documentation (internal use only)
+Digital Ocean Deployment Strategy.md
+GITHUB strategy for portfolio project application to be deployed to digital ocean.md
+PORTFOLIO PROJECT DEPLOYMENT TO DIGITAL .md
+complete guide to get started and configure digital ocean.md
+converting development code to production code.md
+digital ocean start up guide.md
