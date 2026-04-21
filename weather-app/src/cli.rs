@@ -11,4 +11,8 @@ pub struct CliArgs {
     /// Launch GUI interface
     #[arg(short, long, default_value = "false")]
     pub gui: bool,
+
+    /// Start HTTP web server
+    #[arg(short, long, default_value = "false")]
+    pub web: bool,
 }
