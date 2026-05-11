@@ -1,5 +1,6 @@
 const cityInput = document.getElementById('city-input');
 const searchBtn = document.getElementById('search-btn');
+const clearBtn = document.getElementById('clear-btn');
 const errorMsg = document.getElementById('error-msg');
 const loadingEl = document.getElementById('loading');
 const weatherCard = document.getElementById('weather-card');
@@ -53,7 +54,15 @@ function renderWeather(data) {
 
 function setLoading(on) {
     searchBtn.disabled = on;
+    clearBtn.disabled = on;
     loadingEl.classList.toggle('hidden', !on);
+}
+
+function clearForm() {
+    cityInput.value = '';
+    clearError();
+    weatherCard.classList.add('hidden');
+    cityInput.focus();
 }
 
 function showError(msg) {

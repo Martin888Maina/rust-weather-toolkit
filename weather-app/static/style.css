@@ -114,6 +114,17 @@ button:disabled {
     cursor: not-allowed;
 }
 
+.btn-clear {
+    background: transparent;
+    color: var(--text-secondary);
+    border: 1px solid var(--border);
+}
+
+.btn-clear:hover {
+    background: rgba(255, 255, 255, 0.07);
+    color: var(--text-primary);
+}
+
 /* Error message */
 .error-msg {
     color: var(--error);
