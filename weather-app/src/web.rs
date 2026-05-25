@@ -85,7 +85,7 @@ pub async fn run_server(api_key: String) {
         .and_then(|p| p.parse().ok())
         .unwrap_or(3005);
 
-    let bind_addr = format!("0.0.0.0:{}", port);
+    let bind_addr = format!("127.0.0.1:{}", port);
     println!("Starting weather server on http://{}", bind_addr);
 
     let key = web::Data::new(api_key);
