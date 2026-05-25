@@ -34,3 +34,8 @@ complete guide to get started and configure digital ocean.md
 converting development code to production code.md
 digital ocean start up guide.md
 HOW TO UPDATE AND REDEPLOY.md
+
+# Security and implementation guides (internal use only)
+SECURITY CONSIDERATIONS FOR DEPLOYED APPLICATIONS.txt
+COMPLETE GUIDE TO FIX DEPLOYED DIGITAL OCEAN SECURITY ISSUES.txt
+IMPLEMENTING PROPER COMMENTS FOR CODE BASES.md
