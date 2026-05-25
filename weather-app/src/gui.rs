@@ -31,7 +31,6 @@ impl WeatherApp {
 
         self.is_loading = true;
 
-        // Spawn async task
         tokio::spawn(async move {
             let result = weather::fetch_weather(&city, &api_key)
                 .await
@@ -43,7 +42,6 @@ impl WeatherApp {
 
 impl eframe::App for WeatherApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // Check for weather data from async task
         if let Ok(data) = self.rx.try_recv() {
             self.weather_data = Some(data);
             self.is_loading = false;
@@ -53,12 +51,11 @@ impl eframe::App for WeatherApp {
             ui.heading("🌤️ Weather Application");
             ui.add_space(20.0);
 
-            // City input
             ui.horizontal(|ui| {
                 ui.label("City:");
                 let response = ui.text_edit_singleline(&mut self.city_input);
 
-                // Fetch on Enter key
+                // lost_focus() + Enter triggers fetch to avoid firing on every keystroke
                 if response.lost_focus() && ui.input(|i| i.key_pressed(egui::Key::Enter)) {
                     self.fetch_weather();
                 }
@@ -66,20 +63,17 @@ impl eframe::App for WeatherApp {
 
             ui.add_space(10.0);
 
-            // Fetch button
             if ui.button("🔍 Get Weather").clicked() {
                 self.fetch_weather();
             }
 
             ui.add_space(20.0);
 
-            // Loading indicator
             if self.is_loading {
                 ui.spinner();
                 ui.label("Fetching weather data...");
             }
 
-            // Display weather data
             if let Some(ref result) = self.weather_data {
                 match result {
                     Ok(weather) => {

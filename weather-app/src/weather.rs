@@ -1,7 +1,6 @@
 use serde::{Deserialize, Serialize};
 use std::error::Error;
 
-// Define the structure for weather data from API
 #[derive(Debug, Deserialize, Serialize)]
 pub struct WeatherResponse {
     pub main: MainWeather,
@@ -36,7 +35,6 @@ pub struct Wind {
     pub speed: f64,
 }
 
-// Main function to fetch weather data
 pub async fn fetch_weather(city: &str, api_key: &str) -> Result<WeatherResponse, Box<dyn Error>> {
     let url = format!(
         "https://api.openweathermap.org/data/2.5/weather?q={}&appid={}&units=metric",
@@ -53,7 +51,6 @@ pub async fn fetch_weather(city: &str, api_key: &str) -> Result<WeatherResponse,
     Ok(weather_data)
 }
 
-// Helper function to format weather data for display
 pub fn format_weather(weather: &WeatherResponse) -> String {
     format!(
         "Weather in {}, {}:
