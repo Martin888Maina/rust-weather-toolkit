@@ -76,9 +76,9 @@ Rust is a systems programming language that emphasizes three key principles:
 ## 3. System Requirements
 
 ### Operating System Support
-- ✅ **Windows** 10/11 (used for this project)
-- ✅ **Linux** (Ubuntu 20.04+, Debian, Fedora)
-- ✅ **macOS** (10.15 Catalina or later)
+- **Windows** 10/11 (used for this project)
+- **Linux** (Ubuntu 20.04+, Debian, Fedora)
+- **macOS** (10.15 Catalina or later)
 
 ### Required Software
 
@@ -197,13 +197,13 @@ Fetching weather for London...
 
 Weather in London, GB:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌡️  Temperature: 11.0°C
-🤔 Feels like: 10.5°C
-☁️  Condition: overcast clouds
-💧 Humidity: 90%
-🎚️  Pressure: 1006 hPa
-💨 Wind Speed: 3.6 m/s
-👁️  Visibility: 10000 meters
+  Temperature: 11.0 C
+  Feels like: 10.5 C
+  Condition: overcast clouds
+  Humidity: 90%
+  Pressure: 1006 hPa
+  Wind Speed: 3.6 m/s
+  Visibility: 10000 meters
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
@@ -229,13 +229,13 @@ Fetching weather for Nairobi...
 
 Weather in Nairobi, KE:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🌡️  Temperature: 22.5°C
-🤔 Feels like: 22.1°C
-☁️  Condition: broken clouds
-💧 Humidity: 65%
-🎚️  Pressure: 1013 hPa
-💨 Wind Speed: 3.5 m/s
-👁️  Visibility: 10000 meters
+  Temperature: 22.5 C
+  Feels like: 22.1 C
+  Condition: broken clouds
+  Humidity: 65%
+  Pressure: 1013 hPa
+  Wind Speed: 3.5 m/s
+  Visibility: 10000 meters
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 Enter city name (or 'quit' to exit): quit
@@ -297,8 +297,8 @@ This application includes a full web server wrapper built with Actix-web, allowi
 ### Architecture
 
 ```
-Browser → Nginx (HTTPS/443) → Proxy → Rust/Actix-web (port 3005)
-                                              ↓
+Browser -> Nginx (HTTPS/443) -> Proxy -> Rust/Actix-web (port 3005)
+                                              |
                                      OpenWeatherMap API
 ```
 
@@ -343,63 +343,103 @@ sudo systemctl start weather-app
 This section documents all AI prompts used during development, based on Moringa School's recommended prompt strategies for learning new technologies.
 
 #### Prompt 1: README Creation
+
 **Prompt Used:** "Please create a comprehensive README.md for Rust Weather Toolkit with sections for installation, usage, features (Terminal CLI + GUI interfaces), configuration (OpenWeatherMap API key), troubleshooting, and code structure overview."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI generated comprehensive documentation structure with all required sections, markdown formatting, and beginner-friendly explanations.
+
 **Evaluation:** Excellent - Provided solid foundation for project documentation.
 
 #### Prompt 2: Step-by-Step Implementation Guide
+
 **Prompt Used:** "Create a step-by-step guide for implementing async HTTP requests with error handling in Rust for fetching weather data from OpenWeatherMap API, including prerequisites, numbered steps, code blocks, and troubleshooting for API errors (401, 404)."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI provided detailed implementation guide covering async functions, Result types, reqwest usage, and practical error handling examples.
+
 **Evaluation:** Perfect - Made complex async concepts digestible with structured approach.
 
 #### Prompt 3: Error Message Translation
+
 **Prompt Used:** "Explain this Rust error 'mismatched types: expected Box<dyn App>, found Result<Box<WeatherApp>>' from eframe initialization. Context: Rust 1.92, eframe 0.24. Explain in simple terms, identify relevant code lines, list likely causes, and provide debugging steps."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI explained eframe API change, clarified that run_native expects Box<dyn App> directly not wrapped in Result, provided correct syntax.
+
 **Evaluation:** Outstanding - Turned cryptic compiler error into actionable fix quickly.
 
 #### Prompt 4: Test Planning Guidance
+
 **Prompt Used:** "Help me create a testing plan for WeatherResponse struct and fetch_weather function by asking guiding questions, helping identify behaviors and edge cases, and creating a prioritized test checklist rather than writing tests directly."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI guided through identifying testable behaviors (JSON deserialization, error handling), suggested test priorities, and helped discover edge cases.
+
 **Evaluation:** Very good - Learned testing principles through guided discovery.
 
 #### Prompt 5: Code Structure Improvement
+
 **Prompt Used:** "Improve readability of my main.rs code by: applying consistent indentation, breaking long expressions with clear variable names, extracting complex conditions, reducing nesting, separating logical sections, replacing magic numbers with constants."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI refactored code with better variable names, extracted boolean expressions, reduced nesting with early returns, and organized with blank lines.
+
 **Evaluation:** Good - Significantly improved code readability and learned Rust best practices.
 
 #### Prompt 6: Code Quality Review
+
 **Prompt Used:** "Review my weather.rs code for quality improvements. Identify code smells, suggest specific improvements, explain why improvements matter in Rust, and rate readability, performance, and maintainability."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI identified missing input validation, suggested more descriptive errors, recommended logging and thiserror crate. Rated 7/10 readability, 8/10 performance, 6/10 maintainability.
+
 **Evaluation:** Excellent - Concrete suggestions improved error handling and code quality.
 
 #### Prompt 7: Understanding Rust Ownership
+
 **Prompt Used:** "Explain Rust ownership and borrowing with simple examples. Show 3 practical use cases in my weather app, provide a practice project idea, and list common mistakes to avoid."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI explained with book lending analogy, showed examples in weather app (passing API key by reference), suggested cache system practice project.
+
 **Evaluation:** Very good - Analogies and practical examples made ownership concepts clearer.
 
 #### Prompt 8: Conceptual Understanding (JavaScript to Rust)
+
 **Prompt Used:** "I'm proficient in JavaScript learning Rust. Explain key philosophical differences, problems Rust solves, mental models to adjust from JavaScript, and common misconceptions JavaScript developers have about Rust."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI explained compile-time safety vs runtime checks, memory management differences (ownership vs garbage collection), performance trade-offs, and addressed complexity misconceptions.
+
 **Evaluation:** Exceptional - Conceptual foundation made subsequent learning much smoother.
 
 #### Prompt 9: Async/Await Comparison
+
 **Prompt Used:** "I use JavaScript async/await and Promises. Explain Rust's async/await by comparing tokio to JavaScript's event loop, async fn to JavaScript's async functions, handling concurrent requests, and performance implications."
+
 **Link:** https://ai.moringaschool.com
+
 **Response Summary:** AI compared tokio runtime to JavaScript event loop, explained async fn equivalence to JavaScript async functions, showed tokio::spawn vs Promise.all(), highlighted zero-cost abstractions.
+
 **Evaluation:** Perfect - Leveraging JavaScript knowledge made Rust async immediately understandable.
 
 #### Prompt 10: Getting Started with egui
+
 **Prompt Used:** "Add GUI to Rust weather app using egui. Provide Hello World example with text field and button, explain immediate-mode vs retained-mode (React comparison), clarify core concepts, and structure learning path for weather GUI."
+
 **Link:** https://ai.moringaschool.com
-**Response Summary:** AI provided minimal egui example, explained immediate-mode (UI rebuilt every frame vs React virtual DOM), suggested learning order: widgets → layout → state → async.
+
+**Response Summary:** AI provided minimal egui example, explained immediate-mode (UI rebuilt every frame vs React virtual DOM), suggested learning order: widgets -> layout -> state -> async.
+
 **Evaluation:** Very good - React comparison made immediate-mode concepts clear.
 
 ### Overall AI Learning Impact
@@ -563,7 +603,7 @@ error: linker `link.exe` not found
 
 **Error Message:**
 ```
-Failed to bind to 0.0.0.0:3005: address already in use
+Failed to bind to 127.0.0.1:3005: address already in use
 ```
 
 **Cause:** Something else is already running on port 3005
@@ -660,7 +700,7 @@ If you encounter issues not listed here:
 
 ---
 
-## 📦 Project Structure
+## Project Structure
 
 ```
 rust-weather-toolkit/
@@ -685,7 +725,7 @@ rust-weather-toolkit/
 └── README.md                # This file
 ```
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Language**: Rust 1.70+
 - **HTTP Client**: reqwest (async API requests to OpenWeatherMap)
@@ -699,19 +739,19 @@ rust-weather-toolkit/
 - **API**: OpenWeatherMap (weather data provider)
 - **Server**: Digital Ocean Droplet + Nginx + systemd
 
-## ✨ Features
+## Features
 
-- 🌐 **Web Interface**: Browser-based weather app, live at [weather.martinmaina.dev](https://weather.martinmaina.dev)
-- 🖥️ **Terminal Interface**: Interactive CLI for quick weather lookups
-- 🎨 **GUI Interface**: Visual desktop application using egui
-- 🔄 **Shared Logic**: DRY principle — one `weather.rs` module powers all three interfaces
-- 🌍 **Real-time Data**: Live weather from OpenWeatherMap API
-- ⚡ **Async Operations**: Fast, non-blocking API calls with tokio
-- 🏗️ **Feature Flags**: Cargo features separate desktop and server builds cleanly
-- 📝 **Unit Tests**: Test coverage for core functionality
-- 🔒 **Security**: API key management with environment variables, never exposed to the browser
+- **Web Interface**: Browser-based weather app, live at [weather.martinmaina.dev](https://weather.martinmaina.dev)
+- **Terminal Interface**: Interactive CLI for quick weather lookups
+- **GUI Interface**: Visual desktop application using egui
+- **Shared Logic**: DRY principle — one `weather.rs` module powers all three interfaces
+- **Real-time Data**: Live weather from OpenWeatherMap API
+- **Async Operations**: Fast, non-blocking API calls with tokio
+- **Feature Flags**: Cargo features separate desktop and server builds cleanly
+- **Unit Tests**: Test coverage for core functionality
+- **Security**: API key management with environment variables, never exposed to the browser
 
-## 🧪 Testing
+## Testing
 
 ```bash
 cd weather-app
@@ -729,7 +769,7 @@ cargo fmt --check
 cargo clippy
 ```
 
-## 📊 Project Statistics
+## Project Statistics
 
 - **Lines of Code**: ~700
 - **Development Time**: Completed with AI assistance
@@ -737,31 +777,31 @@ cargo clippy
 - **Test Coverage**: Core weather functionality
 - **Interfaces**: 3 (Terminal CLI + Desktop GUI + Web Browser)
 
-## 🎯 Capstone Requirements Met
+## Capstone Requirements Met
 
 This project fulfills all Moringa School capstone requirements:
 
-✅ **Technology Exploration**: Rust (not Python/Java/JavaScript)
-✅ **Working Example**: CLI, GUI, and web interface all fully functional
-✅ **Documentation**: Comprehensive setup and usage guide
-✅ **AI Prompts**: 12+ documented prompts with evaluations
-✅ **Testing**: Unit tests and manual testing completed
-✅ **Code Repository**: GitHub with clear commit history
-✅ **Common Errors**: Troubleshooting section included
-✅ **References**: Official docs and learning resources provided
-✅ **Live Deployment**: Application deployed at [weather.martinmaina.dev](https://weather.martinmaina.dev)
+- **Technology Exploration**: Rust (not Python/Java/JavaScript)
+- **Working Example**: CLI, GUI, and web interface all fully functional
+- **Documentation**: Comprehensive setup and usage guide
+- **AI Prompts**: 12+ documented prompts with evaluations
+- **Testing**: Unit tests and manual testing completed
+- **Code Repository**: GitHub with clear commit history
+- **Common Errors**: Troubleshooting section included
+- **References**: Official docs and learning resources provided
+- **Live Deployment**: Application deployed at [weather.martinmaina.dev](https://weather.martinmaina.dev)
 
-## 👤 Author
+## Author
 
 **Martin Maina**
 Moringa School - AI-Powered Learning Capstone Project
 GitHub: [@Martin888Maina](https://github.com/Martin888Maina)
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
 - Moringa School for the learning opportunity
 - OpenWeatherMap for the free weather API
